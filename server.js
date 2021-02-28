@@ -1,8 +1,8 @@
 //Dependencies found here
-const { listenerCount } = require("events");
+//const { listenerCount } = require("events");
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-//const cTable = require("console.table");
+const cTable = require("console.table");
 const assets = require("./assets");
 
 const connection = mysql.createConnection({
@@ -75,6 +75,8 @@ function questions() {
 }
 
 //input functions to correlate with the users choice 
+
+//function to add department
 function departmentAdd(){
     // need to inquire for the name of the department 
     inquirer
@@ -96,6 +98,7 @@ function departmentAdd(){
     });
 }
 
+//function to add role
 function roleAdd(){
     //need to use inquirer to prompt for the role being added
     inquirer
@@ -129,6 +132,7 @@ function roleAdd(){
     });
 }
 
+//functoin to add employee
 function employeeAdd(){
 //need to use inquirer to prompt for the role being added
 inquirer
@@ -165,3 +169,30 @@ inquirer
         });
     });
 }
+
+function employeeUpdate(){
+   inquirer
+    .prompt([
+        {
+        name:"empUpdate",
+        type:"input",
+        message:"Which Emloyee would you like to update?"
+        },
+        {
+        name:"roleUpdate",
+        type:"input",
+        message:"What is their new role id?"
+        }
+    ])
+    .then(function(answer){
+        connection.query('UPDATE employee SET role_id = ? WHERE first_name = ?,' [answer.empUpdate, answer.roleUpdate], (err, results) => {
+            if (err) throw err;
+            console.log("Inputting to employee table");
+            //insert data as a table
+            console.table(results);
+            //start question  sequence over again 
+            questions();
+        });
+    });
+}
+
