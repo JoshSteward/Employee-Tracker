@@ -27,10 +27,11 @@ connection.connect(function(err) {
 }); 
 
 function questions() {
-
+    //use inquirer package to prompt questions
     inquirer
+        //what would the user like to do 
         .prompt({
-            name: "choices ",
+            name: "answer",
             type:"list",
             message:"What would you like to do?",
             choices:[
@@ -43,8 +44,86 @@ function questions() {
                 "Update Employee Roles"
             ]
         })
-        .then(function())
+        .then(function(answer){
+            console.log(answer.option)
+            //Use the switch statement to select one of many code blocks to be executed.
+            switch (answer.option){
+                case"Add Department":
+                    departmentAdd();
+                    break;
+                case"Add Role":
+                    roleAdd();
+                    break;
+                case "Add Employee":
+                    employeeAdd();
+                    break;
+                case "View Departments":
+                    departmentsView();
+                    break;
+                case "View Roles":
+                    rolesView();
+                    break;
+                case "View Employees":
+                    employeesView();
+                    break; 
+                case "Update Employee Roles":
+                    employeeUpdate();
+                    break;
+            }
+
+        });
 }
 
+//input functions to correlate with the users choice 
+function departmentAdd(){
+    // need to inquire for the name of the department 
+    inquirer
+        .prompt({
+            name:"departmentName",
+            type: "input",
+            message: "What is the name of the department you'd like to add?"
+        })
+        //then input this into our department in schema as a new department 
+        .then(function(answer){
+            connection.query('SELECT * FROM department', (err, result) => {
+                if (err) throw err;
+                console.log("Inputting to department table");
+                //insert data as a table
+                console.table(result);
+                //start question  sequence over again 
+                questions();
+        });
+    });
+}
 
-
+function roleAdd(){
+    //need to use inquirer to prompt for the role being added
+    inquirer
+        .prompt([
+            {
+            name:"title",
+            type:"input",
+            message:"What is the role you'd like to add?"
+            },
+            {
+            name:"salary",
+            type:"input",
+            message:"What is the salary of this role?"
+            },
+            {
+            name:"roleId",
+            type:"input",
+            message:"What is the id of the added role?"
+            }
+    ])
+    //then add this role into the schema employee_role table 
+    .then(function(answers){
+        connection.query('SELECT * FROM employee_role', (err, results) => {
+            if (err) throw err;
+            console.log("Inputting to employee_role table");
+            //insert data as a table
+            console.table(results);
+            //start question  sequence over again 
+            questions();
+    })
+}
