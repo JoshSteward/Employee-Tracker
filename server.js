@@ -46,7 +46,7 @@ function questions() {
         })
         .then(function(result){
             //Use the switch statement to select one of many code blocks to be executed.
-            switch (result.option){
+            switch (result.answer){
                 case"Add Department":
                     departmentAdd();
                     console.log("acessing departmentAdd function");
@@ -88,7 +88,7 @@ function departmentAdd(){
         })
         //then input this into our department in schema as a new department 
         .then(function(answer){
-            connection.query('SELECT * FROM department', (err, result) => {
+            connection.query('INSERT INTO department (name) VALUES ?', (err, result) => {
                 if (err) throw err;
                 console.log("Inputting to department table");
                 //insert data as a table
@@ -122,7 +122,7 @@ function roleAdd(){
     ])
     //then add this role into the schema employee_role table 
     .then(function(answer){
-        connection.query('SELECT * FROM employee_role (title, salary, department_id) VALUES("","","")', [answer.title, answer.salary, answer.departmentId], (err, results) => {
+        connection.query('SELECT * FROM employee_role (title, salary, department_id) VALUES(?,?,?)', [answer.title, answer.salary, answer.departmentId], (err, results) => {
             if (err) throw err;
             console.log("Inputting to employee_role table");
             //insert data as a table
@@ -160,7 +160,7 @@ inquirer
         }
     ])
     .then(function(answer){
-        connection.query('SELECT * FROM employee (firstName, lastName, role_id, manager_id) VALUES("","","","")', [answer.firstName, answer.lastName, answer.roleId, answer.managerId], (err, results) => {
+        connection.query('SELECT * FROM employee (firstName, lastName, role_id, manager_id) VALUES(?,?,?,?)', [answer.firstName, answer.lastName, answer.roleId, answer.managerId], (err, results) => {
             if (err) throw err;
             console.log("Inputting to employee table");
             //insert data as a table
