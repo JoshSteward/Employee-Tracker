@@ -88,7 +88,7 @@ function departmentAdd(){
         })
         //then input this into our department in schema as a new department 
         .then(function(answer){
-            connection.query('INSERT INTO department (name) VALUES ?', (err, result) => {
+            connection.query('INSERT INTO department (name) VALUES ?',[answer.departmentName], (err, result) => {
                 if (err) throw err;
                 console.log("Inputting to department table");
                 //insert data as a table
