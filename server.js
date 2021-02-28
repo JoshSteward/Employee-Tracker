@@ -3,7 +3,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const cTable = require("console.table");
-const assets = require("./assets");
+//const assets = require("./assets");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -44,12 +44,12 @@ function questions() {
                 "Update Employee Roles"
             ]
         })
-        .then(function(answer){
-            console.log(answer.option)
+        .then(function(result){
             //Use the switch statement to select one of many code blocks to be executed.
-            switch (answer.option){
+            switch (result.option){
                 case"Add Department":
                     departmentAdd();
+                    console.log("acessing departmentAdd function");
                     break;
                 case"Add Role":
                     roleAdd();
@@ -78,6 +78,7 @@ function questions() {
 
 //function to add department
 function departmentAdd(){
+    console.log("in department add function");
     // need to inquire for the name of the department 
     inquirer
         .prompt({
