@@ -41,7 +41,8 @@ function questions() {
                 "View Departments",
                 "View Roles",
                 "View Employees",
-                "Update Employee Roles"
+                "Update Employee Roles",
+                "Stop adding"
             ]
         })
         .then(function(result){
@@ -69,6 +70,9 @@ function questions() {
                 case "Update Employee Roles":
                     employeeUpdate();
                     break;
+                case "Stop adding":
+                    stopConnection();
+                    break;
             }
 
         });
@@ -88,11 +92,13 @@ function departmentAdd(){
         })
         //then input this into our department in schema as a new department 
         .then(function(answer){
-            connection.query('INSERT INTO department (department_name) VALUES ?',[answer.departmentName], (err, result) => {
-                if (err) throw err;
+            connection.query('INSERT INTO department SET ? ',{department_name: answer.departmentName});
+            var query = 'SELECT * FROM department';
+            connection.query(query, function(err, res) {
+            if (err) throw err;
                 console.log("Inputting to department table");
                 //insert data as a table
-                console.table(result);
+                console.table(res);
                 //start question  sequence over again 
                 questions();
         });
@@ -122,11 +128,14 @@ function roleAdd(){
     ])
     //then add this role into the schema employee_role table 
     .then(function(answer){
-        connection.query('SELECT * FROM employee_role (title, salary, department_id) VALUES(?,?,?)', [answer.title, answer.salary, answer.departmentId], (err, results) => {
+        //connection.query('SELECT * FROM employee_role (title, salary, department_id) VALUES(?,?,?)', ([answer.title, answer.salary, answer.departmentId]), (err, results) => {
+        connection.query('INSERT INTO employee_role SET ? ',{title: answer.title, salary: answer.salary, department_id: answer.departmentId});
+        var query = 'SELECT * FROM employee_role';
+            connection.query(query, function(err, res) {
             if (err) throw err;
             console.log("Inputting to employee_role table");
             //insert data as a table
-            console.table(results);
+            console.table(res);
             //start question  sequence over again 
             questions();
         });
@@ -160,17 +169,21 @@ inquirer
         }
     ])
     .then(function(answer){
-        connection.query('SELECT * FROM employee (firstName, lastName, role_id, manager_id) VALUES(?,?,?,?)', [answer.firstName, answer.lastName, answer.roleId, answer.managerId], (err, results) => {
+        //connection.query('SELECT * FROM employee (firstName, lastName, role_id, manager_id) VALUES(?,?,?,?)', ([answer.firstName, answer.lastName, answer.roleId, answer.managerId]), (err, results) => {
+        connection.query('INSERT INTO employee SET ? ',{first_name: answer.firstName, last_name: answer.lastName, role_id: answer.roleId, manager_id:answer.managerId});
+        var query = 'SELECT * FROM employee';
+                connection.query(query, function(err, res) {    
             if (err) throw err;
             console.log("Inputting to employee table");
             //insert data as a table
-            console.table(results);
+            console.table(res);
             //start question  sequence over again 
             questions();
         });
     });
 }
 
+//Update employee
 function employeeUpdate(){
    inquirer
     .prompt([
@@ -197,3 +210,58 @@ function employeeUpdate(){
     });
 }
 
+//view departments
+function departmentsView() {
+    var query = 'SELECT * FROM department';
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+    console.log("viewing departments table");
+    //insert data as a table
+    console.table("Deparments: ", res);
+    //start question  sequence over again 
+    questions();
+});
+}
+
+//view employee_role table
+function employeesView() {
+    var query = 'SELECT * FROM employee_role';
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+    console.log("viewing employee_role table");
+    //insert data as a table
+    console.table("Employees: ", res);
+    //start question  sequence over again 
+    questions();
+});
+}
+
+//view roles table
+function rolesView() {
+    var query = 'SELECT * FROM employee_role';
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+    console.log("viewing employee_role table");
+    //insert data as a table
+    console.table("Roles: ", res);
+    //start question  sequence over again 
+    questions();
+});
+}
+
+//view employee_role table
+function employeesView() {
+    var query = 'SELECT * FROM employee';
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+    console.log("viewing employee table");
+    //insert data as a table
+    console.table("Employees: ", res);
+    //start question  sequence over again 
+    questions();
+});
+}
+
+function stopConnection(){
+    connection.end();
+}
