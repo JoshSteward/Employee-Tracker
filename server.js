@@ -111,19 +111,57 @@ function roleAdd(){
             message:"What is the salary of this role?"
             },
             {
-            name:"roleId",
+            name:"departmentId",
             type:"input",
             message:"What is the id of the added role?"
             }
     ])
     //then add this role into the schema employee_role table 
-    .then(function(answers){
-        connection.query('SELECT * FROM employee_role', (err, results) => {
+    .then(function(answer){
+        connection.query('SELECT * FROM employee_role (title, salary, department_id) VALUES("","","")', [answer.title, answer.salary, answer.departmentId], (err, results) => {
             if (err) throw err;
             console.log("Inputting to employee_role table");
             //insert data as a table
             console.table(results);
             //start question  sequence over again 
             questions();
-    })
+        });
+    });
+}
+
+function employeeAdd(){
+//need to use inquirer to prompt for the role being added
+inquirer
+    .prompt([
+        {
+        name:"firstName",
+        type:"input",
+        message:"What is the first name of the employee you'd like to add?"
+        },
+        {
+        name:"lastName",
+        type:"input",
+        message:"What is the last name of the employee you'd like to add?"
+        },
+        {
+        name:"roleId",
+        type:"input",
+        message:"What is the id of the added role?"
+        },
+        {
+        name:"managerId",
+        type:"input",
+        message:"What is the id of the manager for the employee added ?"
+        }
+    ])
+    .then(function(answer){
+        connection.query('SELECT * FROM employee (firstName, lastName, role_id, manager_id) VALUES("","","","")', [answer.firstName, answer.lastName, answer.roleId, answer.managerId], (err, results) => {
+            if (err) throw err;
+            console.log("Inputting to employee table");
+            //insert data as a table
+            console.table(results);
+            //start question  sequence over again 
+            questions();
+        });
+    });
 }
