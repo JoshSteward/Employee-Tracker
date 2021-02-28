@@ -199,7 +199,16 @@ function employeeUpdate(){
         }
     ])
     .then(function(answer){
-        connection.query('UPDATE employee SET role_id = ? WHERE first_name = ?,' [answer.empUpdate, answer.roleUpdate], (err, results) => {
+        connection.query('UPDATE employee SET ? WHERE ?', 
+        [
+            {
+                first_name: answer.empUpdate
+            },
+            {
+                role_id: answer.roleUpdate
+            }
+        ], 
+        (err, results) => {
             if (err) throw err;
             console.log("Inputting to employee table");
             //insert data as a table
