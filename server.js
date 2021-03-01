@@ -188,7 +188,7 @@ function employeeUpdate(){
    inquirer
     .prompt([
         {
-        name:"empUpdate",
+        name:"lastNameUpdate",
         type:"input",
         message:"Which Emloyee would you like to update?"
         },
@@ -198,15 +198,15 @@ function employeeUpdate(){
         message:"What is their new role id?"
         }
     ])
-    //if last name matches an employees last name then change their role id
+    //if
     .then(function(answer){
         connection.query('UPDATE employee SET ? WHERE ?', 
         [
             {
-                last_name: answer.lastNameUpdate
+                role_id: answer.roleUpdate
             },
             {
-                role_id: answer.roleUpdate
+                last_name: answer.lastNameUpdate
             }
         ], 
         (err, results) => {
