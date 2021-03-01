@@ -198,11 +198,12 @@ function employeeUpdate(){
         message:"What is their new role id?"
         }
     ])
+    //if last name matches an employees last name then change their role id
     .then(function(answer){
         connection.query('UPDATE employee SET ? WHERE ?', 
         [
             {
-                first_name: answer.empUpdate
+                last_name: answer.lastNameUpdate
             },
             {
                 role_id: answer.roleUpdate
