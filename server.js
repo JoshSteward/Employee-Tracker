@@ -82,7 +82,7 @@ function questions() {
 
 //function to add department
 function departmentAdd(){
-    console.log("in department add function");
+    //console.log("in department add function");
     // need to inquire for the name of the department 
     inquirer
         .prompt({
@@ -190,7 +190,7 @@ function employeeUpdate(){
         {
         name:"lastNameUpdate",
         type:"input",
-        message:"Which Emloyee would you like to update?"
+        message:"Enter the last name of the Emloyee you would like to update:"
         },
         {
         name:"roleUpdate",
